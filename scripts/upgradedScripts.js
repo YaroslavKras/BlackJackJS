@@ -38,33 +38,34 @@ function calculateHand(hand) {
 }
 
 function compareFinalHands(playerPts, dealerPts) {
-   checkWinCondition(playerPts, dealerPts);
-   if (playerPts > dealerPts){
-        if (confirm("Yay, you won! Another one?")){
+    checkWinCondition(playerPts, dealerPts);
+    if (playerPts > dealerPts) {
+        if (confirm("You won! Another one?")) {
             window.location.reload(false);
         }
     } else {
-        if (confirm("This casino sucks! Another one?")){
+        if (confirm("You lost! Another one?")) {
             window.location.reload(false);
         }
     }
 }
 
 function checkWinCondition(playerPts, dealerPts) {
-    if (playerPts > 21){
-        if (confirm("Aww, you lost, another one?")){
+   //TODO: Refactor checks, rough draft
+    if (playerPts > 21) {
+        if (confirm("You lost, another one?")) {
             window.location.reload(false);
         }
-    } else if (dealerPts > 21){
-        if (confirm("Yay, dealer bust out! Another one?")){
+    } else if (dealerPts > 21) {
+        if (confirm("Dealer bust out! Another one?")) {
             window.location.reload(false);
         }
     } else if (playerPts === 21 || dealerPts === 21) {
         if (playerPts > dealerPts) {
-            if (confirm("Yay, you won! Another one?")) {
+            if (confirm("You won! Another one?")) {
                 window.reload();
             } else {
-                if (confirm("This casino sucks! Another one?")) {
+                if (confirm("You lost! Another one?")) {
                     window.location.reload(false);
                 }
             }
@@ -72,31 +73,39 @@ function checkWinCondition(playerPts, dealerPts) {
     }
 }
 
-let playDeck = shuffle(createDeck());
+function play() {
+    while (true) {
+        let playDeck = shuffle(createDeck());
 
-dealFrom(playDeck);
-dealFrom(playDeck);
-console.log(`Player's hand is: ${playersHand[0][0]} of ${playersHand[0][1]} and ${playersHand[1][0]} of ${playersHand[1][1]}`);
-alert(`Player's hand is: ${playersHand[0][0]} of ${playersHand[0][1]} and ${playersHand[1][0]} of ${playersHand[1][1]}`);
-console.log(`Dealer's hand is: ${dealersHand[0][0]} of ${dealersHand[0][1]} and ${dealersHand[1][0]} of ${dealersHand[1][1]}`);
-alert(`Dealer's hand is: ${dealersHand[0][0]} of ${dealersHand[0][1]} and ${dealersHand[1][0]} of ${dealersHand[1][1]}`);
-let playersPts = calculateHand(playersHand);
-let dealerPts = calculateHand(dealersHand);
-alert(`You have ${playersPts}, and Dealer has ${dealerPts}`);
-console.log("You have " + playersPts);
-console.log("Dealer has " + dealerPts);
-checkWinCondition(playersPts, dealerPts);
-while (true){
-    let hitMe = confirm("Do you want another card?");
-    if (hitMe){
         dealFrom(playDeck);
-        playersPts = calculateHand(playersHand);
-        dealerPts = calculateHand(dealerPts);
+        dealFrom(playDeck);
+
+        console.log(`Player's hand is: ${playersHand[0][0]} of ${playersHand[0][1]} and ${playersHand[1][0]} of ${playersHand[1][1]}`);
+        alert(`Player's hand is: ${playersHand[0][0]} of ${playersHand[0][1]} and ${playersHand[1][0]} of ${playersHand[1][1]}`);
+        console.log(`Dealer's hand is: ${dealersHand[0][0]} of ${dealersHand[0][1]} and ${dealersHand[1][0]} of ${dealersHand[1][1]}`);
+        alert(`Dealer's hand is: ${dealersHand[0][0]} of ${dealersHand[0][1]} and ${dealersHand[1][0]} of ${dealersHand[1][1]}`);
+
+        let playersPts = calculateHand(playersHand);
+        let dealerPts = calculateHand(dealersHand);
+
+        alert(`You have ${playersPts}, and Dealer has ${dealerPts}`);
+        console.log(`You have ${playersPts}, and Dealer has ${dealerPts}`);
+
         checkWinCondition(playersPts, dealerPts);
-    } else {
-        compareFinalHands(playersPts, dealerPts);
-        break;
+
+        let hitMe = confirm("Do you want another card?");
+        if (hitMe) {
+            dealFrom(playDeck);
+            playersPts = calculateHand(playersHand);
+            dealerPts = calculateHand(dealerPts);
+            checkWinCondition(playersPts, dealerPts);
+        } else {
+            compareFinalHands(playersPts, dealerPts);
+            break;
+        }
     }
 }
+
+play();
 
 
