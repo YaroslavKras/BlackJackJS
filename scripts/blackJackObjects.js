@@ -41,6 +41,7 @@ function dealFrom(deck) {
 //TODO: Randomly stops working, why?
 function calculateHand(hand) {
     let result = 0;
+    console.log(hand);
     hand.forEach(card => result += card.ptsValue);
     return result;
 }
@@ -50,10 +51,14 @@ function compareFinalHands(playerPts, dealerPts) {
     if (playerPts > dealerPts) {
         if (confirm("You won! Another one?")) {
             location.reload(false);
+        } else {
+            window.location = "http://localhost:63342/BlackJack/endGame.html";
         }
     } else {
         if (confirm("You lost! Another one?")) {
             window.location.reload(false);
+        } else {
+            window.location = "http://localhost:63342/BlackJack/endGame.html";
         }
     }
 }
@@ -66,24 +71,34 @@ function checkWinCondition(playerPts, dealerPts) {
         if (playerPts > dealerPts) {
             if (confirm("You lost, another one?")) {
                 location.reload(false);
+            } else {
+                window.location = "http://localhost:63342/BlackJack/endGame.html";
             }
         } else {
             if (confirm("Dealer bust out! Another one?")) {
                 location.reload(false);
+            } else {
+                window.location = "http://localhost:63342/BlackJack/endGame.html";
             }
         }
     } else if (isAnyoneHas21) {
         if (playerPts === dealerPts) {
             if (confirm("Draw! Another one?")) {
                 location.reload(false);
-            } else if (playerPts > dealerPts){
-                if (confirm("You won! Another one?")) {
-                    window.location.reload(false);
-                }
             } else {
-                if (confirm("You lost! Another one?")) {
-                    window.location.reload(false);
-                }
+                window.location = "http://localhost:63342/BlackJack/endGame.html";
+            }
+        } else if (playerPts > dealerPts) {
+            if (confirm("You won! Another one?")) {
+                window.location.reload(false);
+            } else {
+                window.location = "http://localhost:63342/BlackJack/endGame.html";
+            }
+        } else {
+            if (confirm("You lost! Another one?")) {
+                window.location.reload(false);
+            } else {
+                window.location = "http://localhost:63342/BlackJack/endGame.html";
             }
         }
     }
@@ -98,33 +113,33 @@ function displayHand(hand, side) {
 }
 
 function play() {
-        let playDeck = shuffle(createDeck());
+    let playDeck = shuffle(createDeck());
 
-        dealFrom(playDeck);
-        dealFrom(playDeck);
+    dealFrom(playDeck);
+    dealFrom(playDeck);
 
+    displayHand(playersHand, "Player");
+    displayHand(dealersHand, "Dealer");
+
+    let playersPts = calculateHand(playersHand);
+    let dealerPts = calculateHand(dealersHand);
+
+    alert(`You have ${playersPts}, and Dealer has ${dealerPts}`);
+    console.log(`You have ${playersPts}, and Dealer has ${dealerPts}`);
+
+    checkWinCondition(playersPts, dealerPts);
+
+    let hitMe = confirm("Do you want another card?");
+    if (hitMe) {
+        dealFrom(playDeck);
         displayHand(playersHand, "Player");
         displayHand(dealersHand, "Dealer");
-
-        let playersPts = calculateHand(playersHand);
-        let dealerPts = calculateHand(dealersHand);
-
-        alert(`You have ${playersPts}, and Dealer has ${dealerPts}`);
-        console.log(`You have ${playersPts}, and Dealer has ${dealerPts}`);
-
+        playersPts = calculateHand(playersHand);
+        dealerPts = calculateHand(dealersHand);
         checkWinCondition(playersPts, dealerPts);
-
-        let hitMe = confirm("Do you want another card?");
-        if (hitMe) {
-            dealFrom(playDeck);
-            displayHand(playersHand, "Player");
-            displayHand(dealersHand, "Dealer");
-            playersPts = calculateHand(playersHand);
-            dealerPts = calculateHand(dealerPts);
-            checkWinCondition(playersPts, dealerPts);
-        } else {
-            compareFinalHands(playersPts, dealerPts);
-        }
+    } else {
+        compareFinalHands(playersPts, dealerPts);
+    }
 }
 
 play();
