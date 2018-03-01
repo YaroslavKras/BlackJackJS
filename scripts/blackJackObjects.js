@@ -37,7 +37,7 @@ function createDeck() {
  * Randomly shuffles array of Card objects. Typically doesn't depend on size of deck array, but might encounter
  * some issues later if size changes (this issue was not tested).
  * @param deck -- array populated with Card objects.
- * @returns {*} -- same array but instead of ordered (by rank -- 4 Aces, 4 Kings, 4 Queens, etc...), is now randomly shuffled.
+ * @returns {Array} -- same array but instead of ordered (by rank -- 4 Aces, 4 Kings, 4 Queens, etc...), is now randomly shuffled.
  */
 function shuffle(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
