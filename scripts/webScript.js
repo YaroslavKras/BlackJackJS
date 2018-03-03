@@ -53,7 +53,7 @@ function Card(suit, rank, ptsValue) {
 }
 
 /**
- * Populates deck array with Card objects. Cards are created dynamicly, by rank (4 Aces, 4 Kings, 4 Queens, etc...)
+ * Populates deck array with Card objects. Cards are created dynamically, by rank (4 Aces, 4 Kings, 4 Queens, etc...)
  * and are added in deck array in the same way.
  * @returns {Array} -- ordered array of Cards.
  */
@@ -83,8 +83,8 @@ function shuffle(deck) {
 }
 
 /**
- * Deals each player single card from deck. Both player and dealers hands arrays add a last (top) element from deck array.
- * It is assumed that deck array is shuffled before calling this function.
+ * Deals each player a number of cards from deck. Both player and dealers hands arrays add a last (top) element from deck array.
+ * It is assumed, though not needed, that deck array is shuffled before calling this function.
  * @param deck -- array populated with Card objects. Assumed that it has 52 cards and shuffled.
  * @param number -- number of cards to be dealt to each player.
  */
