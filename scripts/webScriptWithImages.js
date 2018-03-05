@@ -14,7 +14,12 @@ let isGameStarted = false;
 let hasPlayerWon = false;
 
 //DOM Variables
+let cardRoundsCounter = 0;
 const textArea = document.getElementById('text-area');
+const dealerTextArea = document.getElementById('dealer-text-area');
+const playerTextArea = document.getElementById('player-text-area');
+const dealerImgArea = document.getElementById("dealer-img-area");
+const playerImgArea = document.getElementById("player-img-area");
 const newGameButton = document.getElementById("new-game-button");
 const hitButton = document.getElementById('hit-button');
 const stayButton = document.getElementById('stay-button');
@@ -28,13 +33,17 @@ newGameButton.addEventListener('click', function () {
     refresh();
     display();
 });
+
+
 hitButton.addEventListener('click', function () {
+    removeImages();
     playersHand.push(deck.pop());
     checkWinCondition();
     display();
 });
 
 stayButton.addEventListener('click', function () {
+    removeImages();
     isGameOver = true;
     checkWinCondition();
     display();
@@ -115,7 +124,7 @@ function calculateHand(hand) {
  */
 function getCardsOnHandString(hand) {
     let cards = [];
-    hand.forEach(card => cards.push(card.rank + " of " + card.suit));
+    hand.forEach(card => cards.push(" " + card.rank + " of " + card.suit));
     return cards;
 }
 
@@ -136,20 +145,29 @@ function display() {
         textArea.innerText = "Welcome to BlackJack!";
         return;
     }
+
     let playerHandString, dealerHandString;
     playerHandString = "Player has:\n" + getCardsOnHandString(playersHand);
     dealerHandString = "Dealer has:\n" + getCardsOnHandString(dealersHand);
     updateScores();
-    textArea.innerText = dealerHandString + "\n" + dealersPts + " points.\n\n" + playerHandString + "\n" + playersPts + " points.";
+    textArea.style.display = 'none';
+
+    dealerTextArea.innerText = dealerHandString + "\n" + dealersPts + " points.\n\n";
+
+    dealersHand.forEach(card => displayCard(card, dealerImgArea));
+
+    playerTextArea.innerText = playerHandString + "\n" + playersPts + " points.\n\n";
+
+    playersHand.forEach(card => displayCard(card, playerImgArea));
 
     if (isGameOver) {
         newGameButton.style.display = 'block';
         hitButton.style.display = 'none';
         stayButton.style.display = 'none';
         if (hasPlayerWon) {
-            textArea.innerText += "\n\n\t\tYou won!";
+            playerTextArea.innerText += "\n\t\tYou won!";
         } else {
-            textArea.innerText += "\n\n\t\tDealer won!";
+            dealerTextArea.innerText += "\n\t\tDealer won!";
         }
     }
 }
@@ -189,8 +207,30 @@ function refresh() {
     hitButton.style.display = 'inline';
     stayButton.style.display = 'inline';
 
+    removeImages();
     deck = shuffle(createDeck());
     dealFrom(deck, 2);
 }
 
+function displayCard(card, area) {
+    let img = document.createElement("img");
+    img.src = "res/imgs/cards/" + getCardImgPath(card);
+    img.setAttribute('id', "card-images-" + cardRoundsCounter);
+    img.style.width = '50px';
+    img.style.height = '90px';
+    area.appendChild(img);
+}
+
+function getCardImgPath(card) {
+    let suit = card.suit;
+    return suit.toLowerCase() + "/" + card.rank + ".jpg";
+}
+
+function removeImages() {
+    let images = [].slice.call(document.getElementsByTagName('img'), 0); // get the images as array like object, and turn it into an array using slice
+
+    images.forEach(function (img) { // iterate the images array
+        img.parentNode.removeChild(img); // remove the child node via the parent node
+    });
+}
 display();
