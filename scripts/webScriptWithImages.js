@@ -222,8 +222,7 @@ function displayCard(card, area) {
 }
 
 function getCardImgPath(card) {
-    let suit = card.suit;
-    return suit.toLowerCase() + "/" + card.rank + ".jpg";
+    return card.suit.toLowerCase() + "/" + card.rank + ".jpg";
 }
 
 function removeImages() {
